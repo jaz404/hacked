@@ -1,15 +1,5 @@
 import requests
 from operator import itemgetter
-
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
-
-cred = credentials.Certificate("hacked-2023-ad41e-firebase-adminsdk-lc0yj-acfa8af233.json")
-firebase_admin.initialize_app(cred, {
-    "databaseURL": "https://hacked-2023-ad41e-default-rtdb.firebaseio.com"
-})
-
 BASE_URL = "https://api.edamam.com/api/recipes/v2"
 aid = "fddb9486"
 akey = "f8f8204240d43464a98e520c2a40be62"
@@ -37,7 +27,7 @@ def sortResults(results: dict) -> list:
 def displayMeals(meals: list) -> None:
     n = 1
     for meal in meals:
-        print(f"{n}. {meal['label']} | No. of Ingredients: {meal['countIngds']}")
+        print(f"{n}. {meal['label']} | No. of Ingredients: {meal['countIngds']} | Calories: {int(meal['calories'])}")
         n += 1
 
 def getMeal(mealURI: str) -> dict:
@@ -85,13 +75,7 @@ def main():
         pos = uri.find("_")
         uri = uri[pos+1:]
         meal = getMeal(uri)["recipe"]
-        formatMeal(meal)
-
-def firebase():
-    upload = db.reference("hackathon")
-    dataref = upload.child("data")
-
+        formatMeal(meal)       
 
 if __name__ == '__main__':
     main()
-    firebase()
